@@ -30,6 +30,8 @@ trait Versioned
 
     private static $user_id;
 
+    protected $conexion = null;
+
     /**
      * Boot the trait and set up event listeners.
      */
@@ -290,9 +292,14 @@ trait Versioned
      * Start DB version query
      * @return object
      */
-    private function getVersionQuery()
+    private function getVersionQuery($conexion = null)
     {
-        return DB::table($this->versionsTable);
+        if ($conexion == null) {
+            return DB::table($this->versionsTable);
+        } else {
+            return DB::connection($conexion)->table($this->versionsTable);
+        }
+
     }
 
     /**
@@ -305,5 +312,15 @@ trait Versioned
                     ->where('subject_id', '=', $this->id)
                     ->where('subject_class', '=', get_class($this));
     }
+
+    /**
+     * Set the version name field
+     * @param  string $name
+     */
+    public function setVersionName($name)
+    {
+        $this->versionNameColumn = $name;
+    }
+
 
 }
