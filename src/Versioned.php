@@ -132,8 +132,11 @@ trait Versioned
      *
      * @return int
      */
-    public function getCurrentVersionNo()
+    public function getCurrentVersionNo($conexion = null)
     {
+        if ($conexion !== null) {
+            $this->conexion = $conexion;
+        }
         return $this->getVersionCount() + 1;
     }
 
